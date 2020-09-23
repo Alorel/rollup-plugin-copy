@@ -1,4 +1,4 @@
-import {Plugin, PluginContext} from 'rollup';
+import {OutputPlugin, Plugin, PluginContext} from 'rollup';
 import {CopiableProcessor} from './CopiableProcessor';
 import {mergeSets} from './mergeSets';
 import {getCopiables} from './private-types';
@@ -6,26 +6,49 @@ import {ConfigurableCopiable, Copiable, CopyPluginOptions, EmitNameKind, Pattern
 
 //tslint:disable:no-invalid-this
 
-function copyPlugin(pluginOptions: CopyPluginOptions): Plugin {
+interface WatchOptions extends Omit<CopyPluginOptions, 'watch'> {
+  watch: true;
+}
+
+interface RegularOptions extends Omit<CopyPluginOptions, 'watch'> {
+  watch?: false;
+}
+
+function copyPlugin(pluginOptions: WatchOptions): Plugin;
+function copyPlugin(pluginOptions: RegularOptions): OutputPlugin;
+function copyPlugin(pluginOptions: CopyPluginOptions): Plugin | OutputPlugin;
+function copyPlugin(pluginOptions: CopyPluginOptions): Plugin | OutputPlugin {
   const copiables = getCopiables(pluginOptions);
-  const processor = new CopiableProcessor();
+  const {watch = false} = pluginOptions;
+  const processor = new CopiableProcessor(watch);
 
-  let assets: Set<string>;
+  function run(ctx: PluginContext): Promise<Set<string>[]> {
+    return Promise.all(copiables.map(c => processor.processCopiable(ctx, c)));
+  }
 
-  return {
-    name: 'copy-plugin',
-    buildStart(this: PluginContext): Promise<void> {
-      return Promise.all(copiables.map(c => processor.processCopiable(this, c)))
-        .then(sets => {
-          assets = mergeSets(sets);
-        });
-    },
-    watchChange(id) {
+  const out: Plugin = {
+    name: 'copy-plugin'
+  };
+
+  if (watch) {
+    let assets: Set<string>;
+    out.buildStart = function buildStart(this: PluginContext): Promise<void> {
+      return run(this).then(sets => {
+        assets = mergeSets(sets);
+      });
+    };
+    out.watchChange = function watchChange(id): void {
       if (assets.has(id)) {
         processor.invalidate(id);
       }
-    }
-  };
+    };
+  } else {
+    out.renderStart = async function renderStart(this: PluginContext): Promise<void> {
+      await run(this);
+    };
+  }
+
+  return out;
 }
 
 export {
