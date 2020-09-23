@@ -12,6 +12,9 @@ function dedupeAndFlattenResult(result: string[][]): Set<string> {
 export class CopiableProcessor {
   private readonly readCache: Map<string, Promise<Buffer>> = new Map();
 
+  public constructor(private readonly watch: boolean) {
+  }
+
   public invalidate(fileName: string): void {
     this.readCache.delete(fileName);
   }
@@ -36,7 +39,7 @@ export class CopiableProcessor {
         const rootDir: string = cfg.glob.cwd || process.cwd();
         const promises: Promise<void>[] = files
           .map((f): Promise<void> => {
-            ctx.addWatchFile(f);
+            this.watch && ctx.addWatchFile(f);
 
             return this.loadFile(f)
               .then(source => {

@@ -20,4 +20,7 @@ export interface CopyPluginOptions {
   copy: Copiable[];
 
   defaultOpts?: PatternOptions;
+
+  /** @default false */
+  watch?: boolean;
 }
