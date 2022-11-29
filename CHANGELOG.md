@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/Alorel/rollup-plugin-copy/compare/1.0.2...2.0.0) (2022-11-29)
+
+
+### Maintenance
+
+* Update dependencies & add rollup 3 to supported versions ([ccfa14d](https://github.com/Alorel/rollup-plugin-copy/commit/ccfa14d6b43f5c9ac3b22720edeef67676ef1956))
+
+
+### BREAKING CHANGES
+
+* Officially supported Node versions bumped to v16 & 18
+
 ## [1.0.2](https://github.com/Alorel/rollup-plugin-copy/compare/1.0.1...1.0.2) (2020-09-23)
 
 
