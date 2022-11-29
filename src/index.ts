@@ -1,4 +1,4 @@
-import {OutputPlugin, Plugin, PluginContext} from 'rollup';
+import {FunctionPluginHooks, OutputPlugin, Plugin, PluginContext} from 'rollup';
 import {CopiableProcessor} from './CopiableProcessor';
 import {mergeSets} from './mergeSets';
 import {getCopiables} from './private-types';
@@ -27,23 +27,23 @@ function copyPlugin(pluginOptions: CopyPluginOptions): Plugin | OutputPlugin {
   }
 
   const out: Plugin = {
-    name: 'copy-plugin'
+    name: 'copy-plugin',
   };
 
   if (watch) {
     let assets: Set<string>;
-    out.buildStart = function buildStart(this: PluginContext): Promise<void> {
+    (out as FunctionPluginHooks).buildStart = function buildStart(): Promise<void> {
       return run(this).then(sets => {
         assets = mergeSets(sets);
       });
     };
-    out.watchChange = function watchChange(id): void {
+    (out as FunctionPluginHooks).watchChange = function watchChange(id): void {
       if (assets.has(id)) {
         processor.invalidate(id);
       }
     };
   } else {
-    out.renderStart = async function renderStart(this: PluginContext): Promise<void> {
+    out.renderStart = async function renderStart(): Promise<void> {
       await run(this);
     };
   }
