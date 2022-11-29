@@ -47,7 +47,7 @@ jobs:
         name: Setup node
         with:
           cache: yarn
-          node-version: 13.x
+          node-version: 18
           registry-url: https://npm.pkg.github.com/alorel
       - run: yarn install --immutable
         name: Run yarn install
