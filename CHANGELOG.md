@@ -1,3 +1,17 @@
+## [2.0.1](https://github.com/Alorel/rollup-plugin-copy/compare/2.0.0...2.0.1) (2024-11-10)
+
+
+### Bug Fixes
+
+* Increase `rollup` peer dependency version range ([0f46360](https://github.com/Alorel/rollup-plugin-copy/commit/0f46360aa4010f7d84177d2ecbf28ebf5064302e))
+
+
+### Maintenance
+
+* **deps:** bump actions/checkout from 3 to 4 ([7b6d235](https://github.com/Alorel/rollup-plugin-copy/commit/7b6d23572f40dcf4651cd401bf5753632a084847))
+* **deps:** bump actions/setup-node from 3 to 4 ([8b6eff4](https://github.com/Alorel/rollup-plugin-copy/commit/8b6eff4222dde0e7fe472b9ba4f486c08285705e))
+* **deps:** bump github/codeql-action from 2 to 3 ([a5ee24f](https://github.com/Alorel/rollup-plugin-copy/commit/a5ee24f2a29c407069fe4a9da84fb8a967fac036))
+
 # [2.0.0](https://github.com/Alorel/rollup-plugin-copy/compare/1.0.2...2.0.0) (2022-11-29)
 
 
