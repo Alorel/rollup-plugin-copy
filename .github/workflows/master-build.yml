@@ -19,7 +19,7 @@ jobs:
         name: Checkout
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         name: Setup node
         with:
           cache: yarn
@@ -43,7 +43,7 @@ jobs:
         name: Checkout
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         name: Setup node
         with:
           cache: yarn
